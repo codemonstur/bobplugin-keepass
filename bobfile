@@ -3,9 +3,13 @@ include https://raw.githubusercontent.com/codemonstur/bobfiles/master/foss-app-g
 name: keepass
 version: 4
 enablePreview: false
+release: 11
 packaging: bob-plugin
 dependencies:
   - project: ../bobthebuildtool
     scope: provided
   - repository: de.slackspace:openkeepass:0.8.2
-  - repository: org.linguafranca.pwdb:KeePassJava2:2.2.1
+  - repository: org.linguafranca.pwdb:KeePassJava2:2.2.6
+    scope: test
+  - repository: junit:junit:4.13.2
+    scope: test
