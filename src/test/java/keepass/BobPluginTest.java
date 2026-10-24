@@ -8,7 +8,7 @@ import de.slackspace.openkeepass.domain.GroupBuilder;
 import de.slackspace.openkeepass.domain.KeePassFile;
 import de.slackspace.openkeepass.domain.KeePassFileBuilder;
 import de.slackspace.openkeepass.domain.MetaBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,11 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BobPluginTest {
+class BobPluginTest {
 
     private static Entry entry(final String username, final String password) {
         return new EntryBuilder().title(username == null ? "untitled" : username)
@@ -40,7 +40,7 @@ public class BobPluginTest {
     }
 
     @Test
-    public void loadsEntriesIntoEnvironment() {
+    void loadsEntriesIntoEnvironment() {
         final KeePassFile db = database(null, group("Root", null, entry("user1", "pass1")));
 
         final Map<String, String> env = new HashMap<>();
@@ -50,7 +50,7 @@ public class BobPluginTest {
     }
 
     @Test
-    public void loadsEntriesNestedInSubgroups() {
+    void loadsEntriesNestedInSubgroups() {
         final Group inner = group("Inner", null, entry("nested", "deep"));
         final Group rootChild = new GroupBuilder("Root")
             .addEntry(entry("middle", "mid"))
@@ -66,7 +66,7 @@ public class BobPluginTest {
     }
 
     @Test
-    public void skipsEntriesWithNullUsername() {
+    void skipsEntriesWithNullUsername() {
         final KeePassFile db = database(null,
             group("Root", null, entry(null, "orphan"), entry("good", "val")));
 
@@ -79,7 +79,7 @@ public class BobPluginTest {
     }
 
     @Test
-    public void skipsEntriesWithEmptyUsername() {
+    void skipsEntriesWithEmptyUsername() {
         final KeePassFile db = database(null,
             group("Root", null, entry("", "orphan"), entry("good", "val")));
 
@@ -91,7 +91,7 @@ public class BobPluginTest {
     }
 
     @Test
-    public void nullPasswordBecomesEmptyString() {
+    void nullPasswordBecomesEmptyString() {
         final KeePassFile db = database(null, group("Root", null, entry("user1", null)));
 
         final Map<String, String> env = new HashMap<>();
@@ -102,7 +102,7 @@ public class BobPluginTest {
     }
 
     @Test
-    public void uppercaseUsesRootLocale() {
+    void uppercaseUsesRootLocale() {
         final KeePassFile db = database(null, group("Root", null, entry("user", "pass")));
 
         final Map<String, String> env = new HashMap<>();
@@ -112,7 +112,7 @@ public class BobPluginTest {
     }
 
     @Test
-    public void recycleBinEntriesAreSkipped() {
+    void recycleBinEntriesAreSkipped() {
         final UUID recycleBinId = UUID.randomUUID();
         final KeePassFile db = database(recycleBinId,
             group("Root", null, entry("live", "keep")),
@@ -126,7 +126,7 @@ public class BobPluginTest {
     }
 
     @Test
-    public void recycleBinDisabledLoadsAllEntries() {
+    void recycleBinDisabledLoadsAllEntries() {
         final KeePassFile db = database(null,
             group("Root", null, entry("live", "keep")),
             group("Deleted", null, entry("dead", "drop")));
@@ -139,7 +139,7 @@ public class BobPluginTest {
     }
 
     @Test
-    public void duplicateUsernamesLastWins() {
+    void duplicateUsernamesLastWins() {
         final KeePassFile db = database(null,
             group("Root", null, entry("dup", "first"), entry("dup", "second")));
 
@@ -150,21 +150,21 @@ public class BobPluginTest {
     }
 
     @Test
-    public void relativePathResolvesAgainstProjectRoot() {
+    void relativePathResolvesAgainstProjectRoot() {
         final Project project = new Project(Paths.get("/tmp/project"), Paths.get("/tmp/project/bobfile"));
 
         assertEquals(Paths.get("/tmp/project/keys/db.kdbx"), BobPlugin.toArchivePath(project, "keys/db.kdbx"));
     }
 
     @Test
-    public void absolutePathIsPreserved() {
+    void absolutePathIsPreserved() {
         final Project project = new Project(Paths.get("/tmp/project"), Paths.get("/tmp/project/bobfile"));
 
         assertEquals(Paths.get("/var/data/db.kdbx"), BobPlugin.toArchivePath(project, "/var/data/db.kdbx"));
     }
 
     @Test
-    public void pathIsNormalized() {
+    void pathIsNormalized() {
         final Project project = new Project(Paths.get("/tmp/project"), Paths.get("/tmp/project/bobfile"));
 
         final Path resolved = BobPlugin.toArchivePath(project, "../secrets/db.kdbx");

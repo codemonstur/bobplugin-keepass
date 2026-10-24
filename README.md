@@ -30,7 +30,7 @@ its **password** is the value. Those variables can then be referenced from any b
 Add this line to the top of your bobfile:
 
 ```
-plugin codemonstur/keepass-bobplugin:4
+plugin codemonstur/bobplugin-keepass:4
 ```
 
 The `keepass` command is then available in all your bob tasks.
@@ -91,7 +91,7 @@ Or use the `Makefile`:
 make build      # clean and build
 make test       # run the unit tests
 make coverage   # run tests and generate a JaCoCo coverage report
-make validate   # check dependency versions, CVEs and licenses
+make validate   # check dependency versions, cves, licenses, and code quality
 ```
 
 Building from source uses bob and expects a checkout of

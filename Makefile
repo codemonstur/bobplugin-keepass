@@ -34,11 +34,12 @@ coverage: ## Run tests and generate a jacoco coverage report
 	@output=$$(java src/build/CoverageSummary.java target/site/jacoco/jacoco.csv) || exit $$?; \
 	printf '%s\n' "$$output" | while IFS= read -r line; do $(INFO) "$$line"; done
 
-validate: ## Check dependency versions, cves, and licenses
+validate: ## Check dependency versions, cves, licenses, and code quality
 	@mvn versions:display-dependency-updates
 	@mvn versions:display-plugin-updates
 	@mvn validate -P vulnerabilities
 	@mvn validate -P licenses
+	@mvn validate -P codequality
 
 release-notes:
 	@mkdir -p src/docs/releases
