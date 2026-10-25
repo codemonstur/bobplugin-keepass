@@ -13,8 +13,8 @@ INFO = printf '[\033[1;34mINFO\033[m] %s\n'
 endif
 
 help: ## Show this help
-	@grep -hE '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | \
-		awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
+	@grep -hE '^[a-zA-Z0-9_.-]+:' $(MAKEFILE_LIST) | grep -vE '^[a-zA-Z0-9_.-]+:=' | \
+		awk 'BEGIN {FS = ":"} /^\./ {next} {name = $$1; sub(/[[:blank:]]+$$/, "", name); doc = $$0; sub(/^[^#]*## /, "", doc); if (doc == $$0) sub(/^[^:]*:[[:blank:]]*/, "", doc); printf "  \033[36m%-10s\033[0m %s\n", name, doc}'
 
 clean: ## Delete everything in ./target
 	@$(INFO) "Cleaning"
@@ -41,7 +41,7 @@ validate: ## Check dependency versions, cves, licenses, and code quality
 	@mvn validate -P licenses
 	@mvn validate -P codequality
 
-release-notes:
+release-notes: ## Write release notes in src/docs/releases for the current version
 	@mkdir -p src/docs/releases
 	@$(INFO) "Writing release notes to src/docs/releases/release-$(VERSION).txt"
 	@echo "$(VERSION)" >> src/docs/releases/release-$(VERSION).txt
@@ -49,8 +49,8 @@ release-notes:
 	@git log --pretty="%s" $(PREVIOUS_TAG)... master >> src/docs/releases/release-$(VERSION).txt
 
 deploy: ## Clean, build and deploy a version to Github and Maven Central
-	@$(INFO) "Uploading to maven central"
-	@mvn clean deploy
+	@$(INFO) "Building and running tests"
+	@mvn clean package
 	@$(INFO) "Creating github release"
 	@gh release create $(NAME)-$(VERSION) target/$(NAME).jar target/$(NAME)-javadoc.jar target/$(NAME)-sources.jar -F src/docs/releases/release-$(VERSION).txt
 	@$(INFO) "Tagging and pushing to github"

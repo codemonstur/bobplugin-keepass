@@ -34,14 +34,18 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.release>11</maven.compiler.release>
+
+        <maven.version>[3.6.3,)</maven.version>
 
         <version.library.bobthebuildtool>12</version.library.bobthebuildtool>
         <version.library.openkeepass>0.8.2</version.library.openkeepass>
         <version.library.keepassjava2>2.2.6</version.library.keepassjava2>
         <version.library.junit>6.1.3</version.library.junit>
+
         <version.plugin.surefire>3.6.0</version.plugin.surefire>
         <version.plugin.check-cves>1.1.0</version.plugin.check-cves>
         <version.plugin.codegrade>0.2.0</version.plugin.codegrade>
@@ -101,7 +105,8 @@
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <version>[3.6.3,)</version>
+                                    <version>${maven.version}</version>
+                                    <message>This project requires Maven ${maven.version} to build</message>
                                 </requireMavenVersion>
                             </rules>
                         </configuration>
@@ -160,58 +165,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>${version.plugin.source}</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals><goal>jar</goal></goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${version.plugin.javadoc}</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <phase>deploy</phase>
-                        <goals><goal>jar</goal></goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>${version.plugin.gpg}</version>
-                <configuration>
-                    <passphrase>${gpg.passphrase}</passphrase>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals><goal>sign</goal></goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.sonatype.central</groupId>
-                <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>${version.plugin.publish}</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <publishingServerId>central</publishingServerId>
-                    <autoPublish>true</autoPublish>
-                </configuration>
             </plugin>
 
         </plugins>
@@ -294,6 +247,5 @@
         </profile>
 
     </profiles>
-
 
 </project>
