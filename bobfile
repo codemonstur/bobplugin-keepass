@@ -11,5 +11,5 @@ dependencies:
   - repository: de.slackspace:openkeepass:0.8.2
   - repository: org.linguafranca.pwdb:KeePassJava2:2.2.6
     scope: test
-  - repository: junit:junit:4.13.2
+  - repository: org.junit.jupiter:junit-jupiter:6.1.3
     scope: test
